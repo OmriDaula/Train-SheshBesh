@@ -1,0 +1,136 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Backgammon Match</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- API Key Modal -->
+    <div id="api-modal" class="modal">
+        <div class="modal-content">
+            <h2>Enter OpenAI API Key</h2>
+            <p>Required to play against the AI opponent.<br><i>Stored only in memory, never in localStorage.</i></p>
+            <input type="password" id="api-key-input" placeholder="sk-...">
+            <button id="api-save-btn">Save & Start Match</button>
+            <p id="api-error" class="error-msg"></p>
+        </div>
+    </div>
+
+    <!-- Match Result Modal -->
+    <div id="match-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 id="match-winner-text">Match Over!</h2>
+            <p id="match-score-text">Final Score: White X - Black Y</p>
+            <button id="new-match-btn" class="primary-btn">Start New Match</button>
+        </div>
+    </div>
+
+    <div id="game-container" style="display: none;">
+        <!-- Left Side: Bear-off and Board -->
+        <div id="board-area">
+
+            <div class="bear-off-column">
+                <div class="bear-off-label">Black Bear-off</div>
+                <div id="bear-off-top" class="bear-off" data-index="bearOffBlack"></div>
+                <div class="bear-off-gap"></div>
+                <div id="bear-off-bottom" class="bear-off" data-index="bearOffWhite"></div>
+                <div class="bear-off-label">White Bear-off</div>
+            </div>
+
+            <div id="board">
+                <!-- Board Header Labels & Pips -->
+                <div class="board-header">
+                    <div class="board-header-side left-side">
+                        <span class="home-label black-home" id="black-home-label">Black Home</span>
+                    </div>
+                    <div class="board-header-center">Live Pip Count: <span id="pip-white"
+                            class="bold-white">W:167</span> | <span id="pip-black" class="bold-black">B:167</span> <br>
+                        <span id="pip-advantage" class="advantage-text">Even</span></div>
+                    <div class="board-header-side right-side">
+                        <span class="home-label white-home" id="white-home-label">White Home</span>
+                    </div>
+                </div>
+
+                <div id="top-half" class="half-board top-half">
+                    <div id="top-left" class="quadrant home-black"></div>
+                    <div class="bar-gap" id="bar-top" data-index="barBlack">
+                        <span class="bar-text">BAR</span>
+                    </div>
+                    <div id="top-right" class="quadrant"></div>
+                </div>
+
+                <div id="middle-bar">
+                    <span class="direction-arrow arrow-top" title="AI moves 1 to 24">Black Direction &rarr;</span>
+                    <span class="direction-arrow arrow-bottom" title="Human moves 24 to 1">&larr; White Direction</span>
+                </div>
+
+                <div id="bottom-half" class="half-board bottom-half">
+                    <div id="bottom-left" class="quadrant"></div>
+                    <div class="bar-gap" id="bar-bottom" data-index="barWhite">
+                        <span class="bar-text">BAR</span>
+                    </div>
+                    <div id="bottom-right" class="quadrant home-white"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Sidebar -->
+        <div id="sidebar">
+            <!-- Match Score Tracker -->
+            <div class="match-scoreboard">
+                <div class="match-title">Match to 5 Points</div>
+                <div class="match-scores">
+                    <div class="match-team">
+                        <span>Human (W)</span>
+                        <div class="match-pts" id="match-pts-white">0</div>
+                    </div>
+                    <div class="match-divider">-</div>
+                    <div class="match-team">
+                        <div class="match-pts" id="match-pts-black">0</div>
+                        <span>AI (B)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="turn-status" id="status">Waiting to start...</div>
+
+            <!-- Round Result Controls (Hidden normally) -->
+            <div id="round-result-panel" style="display: none;">
+                <h3 id="round-winnerText">White Wins!</h3>
+                <p id="round-winType">Gammon (2 pts)</p>
+                <div class="round-actions">
+                    <button id="next-round-btn" class="primary-btn">Start Next Game</button>
+                </div>
+            </div>
+
+            <div class="players-info">
+                <div class="player-card white-player" id="card-white">
+                    <h4>👨🏼 Human (White)</h4>
+                    <p class="direction">Moves 24 &rarr; 1 | Your Home: 1-6</p>
+                    <p class="score">Borne off: <span id="score-white">0</span> / 15</p>
+                </div>
+                <div class="player-card black-player" id="card-black">
+                    <h4>🤖 AI (Black)</h4>
+                    <p class="direction">Moves 1 &rarr; 24 | AI Home: 19-24</p>
+                    <p class="score">Borne off: <span id="score-black">0</span> / 15</p>
+                </div>
+            </div>
+
+            <button id="roll-btn" class="primary-btn">Roll Dice</button>
+            <div id="dice-container"></div>
+
+            <h3 class="log-title">Move Log</h3>
+            <div id="log-container"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
